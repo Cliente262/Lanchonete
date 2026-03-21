@@ -146,7 +146,7 @@ div.innerHTML=`
 <label>Tipo:</label>
 <select class="tipo">
 <option value="8">Tradicional - R$8</option>
-<option value="11">Estou com Fome - R$11</option>
+<option value="11"> Tô Fome - R$11</option>
 </select>
 
 <p><strong>Itens:</strong></p>
