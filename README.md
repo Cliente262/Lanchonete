@@ -93,7 +93,6 @@ let countPastel=0, countPrato=0, countBatata=0;
 // ===== PASTEL =====
 function addPastel(){
 countPastel++;
-
 let div=document.createElement("div");
 div.className="box";
 
@@ -136,7 +135,6 @@ atualizarTotal();
 // ===== PRATINHO =====
 function addPratinho(){
 countPrato++;
-
 let div=document.createElement("div");
 div.className="box";
 
@@ -144,17 +142,12 @@ div.innerHTML=`
 <h3>Pratinho ${countPrato}</h3>
 
 <label>Tipo:</label>
-<select class="tipo">
-<option value="8">Tradicional - R$8</option>
-<option value="11"> Tô Fome - R$11</option>
+<select class="tipo" onchange="atualizarItensPrato(this)">
+<option value="tradicional" data-preco="8">Tradicional - R$8</option>
+<option value="fome" data-preco="11">Tô com Fome - R$11</option>
 </select>
 
-<p><strong>Itens:</strong></p>
-<label><input type="checkbox" value="Arroz"> Arroz</label>
-<label><input type="checkbox" value="Farofa"> Farofa</label>
-<label><input type="checkbox" value="Salada"> Salada</label>
-<label><input type="checkbox" value="Vinagrete"> Vinagrete</label>
-<label><input type="checkbox" value="Vatapá"> Vatapá</label>
+<div class="itensPrato"></div>
 
 <p><strong>Adicionais (+R$3):</strong></p>
 <label><input type="checkbox" class="extraPrato" value="Calabresa"> Calabresa</label>
@@ -164,13 +157,40 @@ div.innerHTML=`
 `;
 
 document.getElementById("pratinhos").appendChild(div);
+atualizarItensPrato(div.querySelector(".tipo"));
+atualizarTotal();
+}
+
+// ===== TROCAR ITENS =====
+function atualizarItensPrato(select){
+let container = select.parentElement.querySelector(".itensPrato");
+
+if(select.value === "tradicional"){
+container.innerHTML = `
+<p><strong>Itens:</strong></p>
+<label><input type="checkbox" value="Arroz"> Arroz</label>
+<label><input type="checkbox" value="Farofa"> Farofa</label>
+<label><input type="checkbox" value="Salada"> Salada</label>
+<label><input type="checkbox" value="Vinagrete"> Vinagrete</label>
+<label><input type="checkbox" value="Vatapá"> Vatapá</label>
+`;
+}else{
+container.innerHTML = `
+<p><strong>Itens:</strong></p>
+<label><input type="checkbox" value="Baião cremoso"> Baião cremoso</label>
+<label><input type="checkbox" value="Vatapá"> Vatapá</label>
+<label><input type="checkbox" value="Escondidinho de carne"> Escondidinho de carne</label>
+<label><input type="checkbox" value="Paçoca"> Paçoca</label>
+<label><input type="checkbox" value="Macaxeira"> Macaxeira</label>
+`;
+}
+
 atualizarTotal();
 }
 
 // ===== BATATA =====
 function addBatata(){
 countBatata++;
-
 let div=document.createElement("div");
 div.className="box";
 
@@ -201,10 +221,19 @@ atualizarTotal();
 function atualizarTotal(){
 let total=0;
 
+// pastel
 document.querySelectorAll("#pasteis .tam").forEach(s=> total+=parseInt(s.value));
-document.querySelectorAll("#pratinhos .tipo").forEach(s=> total+=parseInt(s.value));
+
+// pratinho (dinâmico)
+document.querySelectorAll("#pratinhos .tipo").forEach(s=>{
+let preco = s.selectedOptions[0].dataset.preco;
+total += parseInt(preco);
+});
+
+// batata
 document.querySelectorAll("#batatas .tipo").forEach(s=> total+=parseInt(s.value));
 
+// adicionais pratinho
 document.querySelectorAll(".extraPrato:checked").forEach(()=> total+=3);
 
 document.getElementById("total").innerText=total;
@@ -212,6 +241,7 @@ document.getElementById("total").innerText=total;
 
 document.addEventListener("change", atualizarTotal);
 
+// inicial
 addPastel();
 
 // ===== RESUMO =====
