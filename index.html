@@ -499,14 +499,6 @@ ${combo.nome} - R$${combo.preco}
  
 atualizarTotal();
 }
-combosAdmin.forEach(combo=>{
-select.innerHTML += `
-<option value="${combo.preco}">${combo.nome} - R$${combo.preco}</option>
-`;
-});
-
-atualizarTotal();
-}
 function fecharAdmin(){
 document.getElementById("adminBox").style.display="none";
 }
