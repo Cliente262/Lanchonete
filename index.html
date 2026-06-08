@@ -426,7 +426,7 @@ function abrirAdmin(){
 
 let senha = prompt("Digite a senha:");
 
-if(senha !== "1234"){
+if(senha !== "0806"){
 alert("Senha incorreta");
 return;
 }
@@ -487,12 +487,17 @@ atualizarSelectCombos();
 
 function atualizarSelectCombos(){
 document.querySelectorAll(".comboPreco").forEach(select=>{
-select.innerHTML = `
-<option value="20">Combo Econômico - R$20</option>
-<option value="25">Combo Família - R$25</option>
-<option value="30">Combo Especial - R$30</option>
-`;
+select.innerHTML = "";
 
+combosAdmin.forEach(combo=>{
+select.innerHTML += `
+<option value="${combo.preco}">${combo.nome} - R$${combo.preco}</option>
+`;
+});
+});
+
+atualizarTotal();
+}
 combosAdmin.forEach(combo=>{
 select.innerHTML += `
 <option value="${combo.preco}">${combo.nome} - R$${combo.preco}</option>
