@@ -97,21 +97,29 @@ margin:5px 0;
 
 <div class="container">
 
+<div id="pasteisArea">
 <h1>🥟 Pastéis</h1>
 <div id="pasteis"></div>
 <button class="btnAdd" onclick="addPastel()">➕ Adicionar pastel</button>
-
+</div>
+  
+<div id="pratinhosArea">
 <h1>🍛 Pratinhos</h1>
 <div id="pratinhos"></div>
 <button class="btnAdd" onclick="addPratinho()">➕ Adicionar pratinho</button>
+</div>
 
+<div id="batatasArea">
 <h1>🍟 Batatinhas</h1>
 <div id="batatas"></div>
 <button class="btnAdd" onclick="addBatata()">➕ Adicionar batata</button>
+</div>
 
+<div id="combosArea">
 <h1>🔥 Combos Especiais</h1>
 <div id="combos"></div>
 <button class="btnAdd" onclick="addCombo()">➕ Adicionar combo</button>
+</div>
   
   <div class="totalBox">
 Total: R$ <span id="total">0</span>
@@ -126,6 +134,13 @@ Total: R$ <span id="total">0</span>
 <div class="adminContent">
 
 <h2>⚙️ Configurações</h2>
+
+<h3>Mostrar / Ocultar Categorias</h3>
+
+<button onclick="alternarCategoria('pasteisArea')">🥟 Mostrar/Ocultar Pastéis</button>
+<button onclick="alternarCategoria('pratinhosArea')">🍛 Mostrar/Ocultar Pratinhos</button>
+<button onclick="alternarCategoria('batatasArea')">🍟 Mostrar/Ocultar Batatinhas</button>
+<button onclick="alternarCategoria('combosArea')">🔥 Mostrar/Ocultar Combos</button>
 
 <h3>Adicionar Combo Especial</h3>
 <input id="nomeComboAdmin" placeholder="Nome do combo">
@@ -487,6 +502,31 @@ select.innerHTML += `
 
 atualizarTotal();
 }
+function fecharAdmin(){
+document.getElementById("adminBox").style.display="none";
+}
+  function alternarCategoria(id){
+let area = document.getElementById(id);
+
+if(area.style.display === "none"){
+area.style.display = "block";
+localStorage.setItem(id, "block");
+}else{
+area.style.display = "none";
+localStorage.setItem(id, "none");
+}
+}
+
+function carregarCategorias(){
+["pasteisArea","pratinhosArea","batatasArea","combosArea"].forEach(id=>{
+let status = localStorage.getItem(id);
+if(status){
+document.getElementById(id).style.display = status;
+}
+});
+}
+
+carregarCategorias();
 </script>
 
 </body>
