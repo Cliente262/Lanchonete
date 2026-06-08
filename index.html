@@ -48,6 +48,46 @@ text-align:center;
 font-size:20px;
 margin-top:20px;
 }
+.configBtn{
+position:fixed;
+right:15px;
+bottom:15px;
+width:55px;
+height:55px;
+border-radius:50%;
+background:#333;
+font-size:25px;
+z-index:10;
+}
+
+.adminBox{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000000cc;
+z-index:20;
+justify-content:center;
+align-items:center;
+}
+
+.adminContent{
+background:white;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:450px;
+max-height:90%;
+overflow:auto;
+}
+
+.adminContent input{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
 </style>
 </head>
 
@@ -69,14 +109,38 @@ margin-top:20px;
 <div id="batatas"></div>
 <button class="btnAdd" onclick="addBatata()">➕ Adicionar batata</button>
 
-<div class="totalBox">
+<h1>🔥 Combos Especiais</h1>
+<div id="combos"></div>
+<button class="btnAdd" onclick="addCombo()">➕ Adicionar combo</button>
+  
+  <div class="totalBox">
 Total: R$ <span id="total">0</span>
 </div>
 
 <button onclick="enviarPedido()">Enviar pedido no WhatsApp</button>
 
 </div>
+<button class="configBtn" onclick="abrirAdmin()">⚙️</button>
 
+<div id="adminBox" class="adminBox">
+<div class="adminContent">
+
+<h2>⚙️ Configurações</h2>
+
+<h3>Adicionar Combo Especial</h3>
+<input id="nomeComboAdmin" placeholder="Nome do combo">
+<input id="descComboAdmin" placeholder="Descrição do combo">
+<input id="precoComboAdmin" placeholder="Preço do combo">
+
+<button class="btnAdd" onclick="criarComboAdmin()">Adicionar combo ao cardápio</button>
+
+<h3>Combos cadastrados</h3>
+<div id="listaCombosAdmin"></div>
+
+<button class="btnRemove" onclick="fecharAdmin()">Fechar</button>
+
+</div>
+</div>
 <!-- RESUMO -->
 <div id="resumoBox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; justify-content:center; align-items:center;">
 <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; max-height:80%; overflow:auto;">
@@ -88,7 +152,10 @@ Total: R$ <span id="total">0</span>
 </div>
 
 <script>
-let countPastel=0, countPrato=0, countBatata=0;
+let countPastel=0;
+let countPrato=0;
+let countBatata=0;
+let countCombo=0;
 
 // ===== PASTEL =====
 function addPastel(){
@@ -216,6 +283,39 @@ div.innerHTML=`
 document.getElementById("batatas").appendChild(div);
 atualizarTotal();
 }
+  function addCombo(){
+countCombo++;
+
+let div=document.createElement("div");
+div.className="box";
+
+div.innerHTML=`
+<h3>Combo ${countCombo}</h3>
+
+<label>Tipo:</label>
+<select class="comboPreco">
+<option value="20">Combo Econômico - R$20</option>
+<option value="25">Combo Família - R$25</option>
+<option value="30">Combo Especial - R$30</option>
+</select>
+
+<p><strong>Inclui:</strong></p>
+
+<label><input type="checkbox" value="Pastel"> Pastel</label>
+<label><input type="checkbox" value="Batata"> Batata</label>
+<label><input type="checkbox" value="Refrigerante"> Refrigerante</label>
+
+<button class="btnRemove"
+onclick="this.parentElement.remove(); atualizarTotal()">
+❌ Remover
+</button>
+`;
+
+document.getElementById("combos").appendChild(div);
+    atualizarSelectCombos();
+
+atualizarTotal();
+}
 
 // ===== TOTAL =====
 function atualizarTotal(){
@@ -235,15 +335,28 @@ document.querySelectorAll("#batatas .tipo").forEach(s=> total+=parseInt(s.value)
 
 // adicionais pratinho
 document.querySelectorAll(".extraPrato:checked").forEach(()=> total+=3);
+ 
+  // combos
+document.querySelectorAll(".comboPreco").forEach(s=> total+=parseInt(s.value));
 
 document.getElementById("total").innerText=total;
 }
 
 document.addEventListener("change", atualizarTotal);
+ 
+  function salvarCardapio(){
+localStorage.setItem(
+"cardapio",
+document.querySelector(".container").innerHTML
+);
+}
+
+setInterval(salvarCardapio,2000);
 
 // inicial
-addPastel();
-
+addPastel();  
+atualizarSelectCombos();
+  
 // ===== RESUMO =====
 function enviarPedido(){
 let html="";
@@ -290,6 +403,93 @@ msg+="%0A";
 msg+=`%0ATotal: R$ ${document.getElementById("total").innerText}`;
 
 window.open("https://wa.me/5585992265249?text="+msg);
+}
+let combosAdmin = JSON.parse(localStorage.getItem("combosAdmin")) || [];
+
+function abrirAdmin(){
+document.getElementById("adminBox").style.display="flex";
+mostrarCombosAdmin();
+}
+
+function abrirAdmin(){
+
+let senha = prompt("Digite a senha:");
+
+if(senha !== "1234"){
+alert("Senha incorreta");
+return;
+}
+
+document.getElementById("adminBox").style.display="flex";
+mostrarCombosAdmin();
+
+}
+
+function criarComboAdmin(){
+let nome = document.getElementById("nomeComboAdmin").value;
+let desc = document.getElementById("descComboAdmin").value;
+let preco = document.getElementById("precoComboAdmin").value;
+
+if(nome === "" || preco === ""){
+alert("Preencha pelo menos o nome e o preço do combo");
+return;
+}
+
+combosAdmin.push({
+nome:nome,
+desc:desc,
+preco:preco
+});
+
+localStorage.setItem("combosAdmin", JSON.stringify(combosAdmin));
+
+document.getElementById("nomeComboAdmin").value="";
+document.getElementById("descComboAdmin").value="";
+document.getElementById("precoComboAdmin").value="";
+
+mostrarCombosAdmin();
+atualizarSelectCombos();
+}
+
+function mostrarCombosAdmin(){
+let lista = document.getElementById("listaCombosAdmin");
+lista.innerHTML="";
+
+combosAdmin.forEach((combo,index)=>{
+lista.innerHTML += `
+<div class="box">
+<strong>${combo.nome}</strong><br>
+${combo.desc}<br>
+R$ ${combo.preco}
+<button class="btnRemove" onclick="removerComboAdmin(${index})">Remover</button>
+</div>
+`;
+});
+}
+
+function removerComboAdmin(index){
+combosAdmin.splice(index,1);
+localStorage.setItem("combosAdmin", JSON.stringify(combosAdmin));
+mostrarCombosAdmin();
+atualizarSelectCombos();
+}
+
+function atualizarSelectCombos(){
+document.querySelectorAll(".comboPreco").forEach(select=>{
+select.innerHTML = `
+<option value="20">Combo Econômico - R$20</option>
+<option value="25">Combo Família - R$25</option>
+<option value="30">Combo Especial - R$30</option>
+`;
+
+combosAdmin.forEach(combo=>{
+select.innerHTML += `
+<option value="${combo.preco}">${combo.nome} - R$${combo.preco}</option>
+`;
+});
+});
+
+atualizarTotal();
 }
 </script>
 
