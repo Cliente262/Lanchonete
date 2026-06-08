@@ -308,11 +308,7 @@ div.innerHTML=`
 <h3>Combo ${countCombo}</h3>
 
 <label>Tipo:</label>
-<select class="comboPreco">
-<option value="20">Combo Econômico - R$20</option>
-<option value="25">Combo Família - R$25</option>
-<option value="30">Combo Especial - R$30</option>
-</select>
+<select class="comboPreco"></select>
 
 <p><strong>Inclui:</strong></p>
 
@@ -486,15 +482,21 @@ atualizarSelectCombos();
 }
 
 function atualizarSelectCombos(){
+
 document.querySelectorAll(".comboPreco").forEach(select=>{
+
 select.innerHTML = "";
 
 combosAdmin.forEach(combo=>{
 select.innerHTML += `
-<option value="${combo.preco}">${combo.nome} - R$${combo.preco}</option>
+<option value="${combo.preco}">
+${combo.nome} - R$${combo.preco}
+</option>
 `;
-});+
+});
 
+});
+ 
 atualizarTotal();
 }
 combosAdmin.forEach(combo=>{
