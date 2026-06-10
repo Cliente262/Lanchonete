@@ -298,7 +298,8 @@ div.innerHTML=`
 document.getElementById("batatas").appendChild(div);
 atualizarTotal();
 }
-  function addCombo(){
+function addCombo(){
+
 countCombo++;
 
 let div=document.createElement("div");
@@ -307,14 +308,8 @@ div.className="box";
 div.innerHTML=`
 <h3>Combo ${countCombo}</h3>
 
-<label>Tipo:</label>
+<label>Escolha o combo:</label>
 <select class="comboPreco"></select>
-
-<p><strong>Inclui:</strong></p>
-
-<label><input type="checkbox" value="Pastel"> Pastel</label>
-<label><input type="checkbox" value="Batata"> Batata</label>
-<label><input type="checkbox" value="Refrigerante"> Refrigerante</label>
 
 <button class="btnRemove"
 onclick="this.parentElement.remove(); atualizarTotal()">
@@ -323,8 +318,8 @@ onclick="this.parentElement.remove(); atualizarTotal()">
 `;
 
 document.getElementById("combos").appendChild(div);
-    atualizarSelectCombos();
 
+atualizarSelectCombos();
 atualizarTotal();
 }
 
