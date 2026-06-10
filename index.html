@@ -671,13 +671,18 @@ select.innerHTML = "";
 
 combosAdmin.forEach(combo=>{
 select.innerHTML += `
-<option value="${combo.preco}">
-${combo.nome} - R$${combo.preco}
+<option 
+value="${combo.preco}" 
+data-desc="${combo.desc}">
+${combo.nome} - ${combo.desc} - R$${combo.preco}
 </option>
 `;
 });
 
 });
+ 
+atualizarTotal();
+}
  
 atualizarTotal();
 }
