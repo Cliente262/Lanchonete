@@ -23,11 +23,7 @@ box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 label{display:block;margin:5px 0;}
-select,input{
-padding:8px;
-margin-top:5px;
-width:100%;
-}
+select,input{padding:8px;margin-top:5px;width:100%;}
 
 button{
 background:#25D366;
@@ -386,8 +382,7 @@ div.innerHTML=`
 
 <p class="descricaoComboPedido"></p>
 
-<button class="btnRemove"
-onclick="this.parentElement.remove(); atualizarTotal()">
+<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">
 ❌ Remover
 </button>
 `;
@@ -687,40 +682,17 @@ document.querySelectorAll(".comboPreco").forEach(select=>{
 select.innerHTML = "";
 
 combosAdmin.forEach(combo=>{
-let descricao = combo.desc && combo.desc.trim() !== "" ? combo.desc : "Sem descrição";
-
 select.innerHTML += `
 <option 
 value="${combo.preco}" 
-data-nome="${combo.nome}"
-data-desc="${descricao}"
-data-preco="${combo.preco}">
-${combo.nome} - R$${combo.preco}
+data-desc="${combo.desc}">
+${combo.nome} - ${combo.desc} - R$${combo.preco}
 </option>
 `;
 });
 
-mostrarDescricaoCombo(select);
-
 });
-
-atualizarTotal();
-}
-
-function mostrarDescricaoCombo(select){
-if(!select || !select.selectedOptions[0]) return;
-
-let opcao = select.selectedOptions[0];
-let box = select.parentElement;
-let areaDescricao = box.querySelector(".descricaoComboPedido");
-
-if(areaDescricao){
-areaDescricao.innerHTML = `
-<strong>Descrição:</strong> ${opcao.dataset.desc}<br>
-<strong>Preço:</strong> R$ ${opcao.dataset.preco}
-`;
-}
-
+ 
 atualizarTotal();
 }
 
