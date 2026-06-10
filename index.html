@@ -23,7 +23,11 @@ box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 label{display:block;margin:5px 0;}
-select,input{padding:5px;margin-top:5px;}
+select,input{
+padding:8px;
+margin-top:5px;
+width:100%;
+}
 
 button{
 background:#25D366;
@@ -378,7 +382,9 @@ div.innerHTML=`
 <h3>Combo ${countCombo}</h3>
 
 <label>Escolha o combo:</label>
-<select class="comboPreco"></select>
+<select class="comboPreco" onchange="mostrarDescricaoCombo(this)"></select>
+
+<p class="descricaoComboPedido"></p>
 
 <button class="btnRemove"
 onclick="this.parentElement.remove(); atualizarTotal()">
@@ -389,6 +395,7 @@ onclick="this.parentElement.remove(); atualizarTotal()">
 document.getElementById("combos").appendChild(div);
 
 atualizarSelectCombos();
+mostrarDescricaoCombo(div.querySelector(".comboPreco"));
 atualizarTotal();
 }
 
@@ -440,7 +447,17 @@ atualizarSelectCombos();
 function textoSelect(box){
 let select = box.querySelector("select");
 if(!select || !select.selectedOptions[0]) return "";
-return select.selectedOptions[0].text;
+
+let opcao = select.selectedOptions[0];
+
+if(select.classList.contains("comboPreco")){
+let nome = opcao.dataset.nome || "";
+let desc = opcao.dataset.desc || "";
+let preco = opcao.dataset.preco || opcao.value;
+return `${nome} - ${desc} - R$${preco}`;
+}
+
+return opcao.text;
 }
 
 // ===== RESUMO =====
@@ -670,24 +687,40 @@ document.querySelectorAll(".comboPreco").forEach(select=>{
 select.innerHTML = "";
 
 combosAdmin.forEach(combo=>{
-let descricao = combo.desc ? combo.desc : "Sem descrição";
+let descricao = combo.desc && combo.desc.trim() !== "" ? combo.desc : "Sem descrição";
 
 select.innerHTML += `
 <option 
 value="${combo.preco}" 
-data-desc="${descricao}">
-${combo.nome} - ${descricao} - R$${combo.preco}
+data-nome="${combo.nome}"
+data-desc="${descricao}"
+data-preco="${combo.preco}">
+${combo.nome} - R$${combo.preco}
 </option>
 `;
 });
 
+mostrarDescricaoCombo(select);
+
 });
 
 atualizarTotal();
-});
+}
 
-});
- 
+function mostrarDescricaoCombo(select){
+if(!select || !select.selectedOptions[0]) return;
+
+let opcao = select.selectedOptions[0];
+let box = select.parentElement;
+let areaDescricao = box.querySelector(".descricaoComboPedido");
+
+if(areaDescricao){
+areaDescricao.innerHTML = `
+<strong>Descrição:</strong> ${opcao.dataset.desc}<br>
+<strong>Preço:</strong> R$ ${opcao.dataset.preco}
+`;
+}
+
 atualizarTotal();
 }
 
