@@ -16,7 +16,7 @@ h1{margin-top:25px;color:#333;}
 
 .box{
 background:white;
-padding:15px; 
+padding:15px;
 border-radius:12px;
 margin-bottom:12px;
 box-shadow:0 4px 10px rgba(0,0,0,0.1);
@@ -115,6 +115,18 @@ margin:5px 0;
 <button class="btnAdd" onclick="addBatata()">➕ Adicionar batata</button>
 </div>
 
+<div id="tortasArea">
+<h1>🥧 Tortas</h1>
+
+<h3>Torta Doce - R$10</h3>
+<div id="tortasDoces"></div>
+<button class="btnAdd" onclick="addTortaDocePedido()">➕ Adicionar torta doce</button>
+
+<h3>Torta Salgada - R$9</h3>
+<div id="tortasSalgadas"></div>
+<button class="btnAdd" onclick="addTortaSalgadaPedido()">➕ Adicionar torta salgada</button>
+</div>
+
 <div id="combosArea">
 <h1>🔥 Combos Especiais</h1>
 <div id="combos"></div>
@@ -140,7 +152,22 @@ Total: R$ <span id="total">0</span>
 <button onclick="alternarCategoria('pasteisArea')">🥟 Mostrar/Ocultar Pastéis</button>
 <button onclick="alternarCategoria('pratinhosArea')">🍛 Mostrar/Ocultar Pratinhos</button>
 <button onclick="alternarCategoria('batatasArea')">🍟 Mostrar/Ocultar Batatinhas</button>
+<button onclick="alternarCategoria('tortasArea')">🥧 Mostrar/Ocultar Tortas</button>
 <button onclick="alternarCategoria('combosArea')">🔥 Mostrar/Ocultar Combos</button>
+
+<h3>Adicionar Torta Doce</h3>
+<input id="nomeTortaDoceAdmin" placeholder="Ex: Red Velvet">
+<button class="btnAdd" onclick="criarTortaDoceAdmin()">Adicionar torta doce</button>
+
+<h3>Tortas doces cadastradas</h3>
+<div id="listaTortasDocesAdmin"></div>
+
+<h3>Adicionar Torta Salgada</h3>
+<input id="nomeTortaSalgadaAdmin" placeholder="Ex: Frango com catupiry">
+<button class="btnAdd" onclick="criarTortaSalgadaAdmin()">Adicionar torta salgada</button>
+
+<h3>Tortas salgadas cadastradas</h3>
+<div id="listaTortasSalgadasAdmin"></div>
 
 <h3>Adicionar Combo Especial</h3>
 <input id="nomeComboAdmin" placeholder="Nome do combo">
@@ -170,6 +197,8 @@ Total: R$ <span id="total">0</span>
 let countPastel=0;
 let countPrato=0;
 let countBatata=0;
+let countTortaDoce=0;
+let countTortaSalgada=0;
 let countCombo=0;
 
 // ===== PASTEL =====
@@ -298,6 +327,46 @@ div.innerHTML=`
 document.getElementById("batatas").appendChild(div);
 atualizarTotal();
 }
+
+// ===== TORTAS =====
+function addTortaDocePedido(){
+countTortaDoce++;
+let div=document.createElement("div");
+div.className="box";
+
+div.innerHTML=`
+<h3>Torta Doce ${countTortaDoce}</h3>
+
+<label>Escolha a torta:</label>
+<select class="tortaPreco tortaDoceSelect"></select>
+
+<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>
+`;
+
+document.getElementById("tortasDoces").appendChild(div);
+atualizarSelectTortas();
+atualizarTotal();
+}
+
+function addTortaSalgadaPedido(){
+countTortaSalgada++;
+let div=document.createElement("div");
+div.className="box";
+
+div.innerHTML=`
+<h3>Torta Salgada ${countTortaSalgada}</h3>
+
+<label>Escolha a torta:</label>
+<select class="tortaPreco tortaSalgadaSelect"></select>
+
+<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>
+`;
+
+document.getElementById("tortasSalgadas").appendChild(div);
+atualizarSelectTortas();
+atualizarTotal();
+}
+
 function addCombo(){
 
 countCombo++;
@@ -337,13 +406,16 @@ total += parseInt(preco);
 });
 
 // batata
-document.querySelectorAll("#batatas .tipo").forEach(s=> total+=parseInt(s.value));
+document.querySelectorAll("#batatas .tipo").forEach(s=> total+=parseInt(s.value) || 0);
+
+// tortas
+document.querySelectorAll(".tortaPreco").forEach(s=> total+=parseInt(s.value) || 0);
 
 // adicionais pratinho
 document.querySelectorAll(".extraPrato:checked").forEach(()=> total+=3);
  
   // combos
-document.querySelectorAll(".comboPreco").forEach(s=> total+=parseInt(s.value));
+document.querySelectorAll(".comboPreco").forEach(s=> total+=parseInt(s.value) || 0);
 
 document.getElementById("total").innerText=total;
 }
@@ -361,8 +433,16 @@ setInterval(salvarCardapio,2000);
 
 // inicial
 addPastel();  
+atualizarSelectTortas();
 atualizarSelectCombos();
   
+
+function textoSelect(box){
+let select = box.querySelector("select");
+if(!select || !select.selectedOptions[0]) return "";
+return select.selectedOptions[0].text;
+}
+
 // ===== RESUMO =====
 function enviarPedido(){
 let html="";
@@ -370,7 +450,7 @@ let total=document.getElementById("total").innerText;
 
 document.querySelectorAll(".box").forEach((p,i)=>{
 let titulo=p.querySelector("h3").innerText;
-let tipo=p.querySelector("select")?.selectedOptions[0].text || "";
+let tipo=textoSelect(p);
 
 let add=[];
 p.querySelectorAll("input:checked").forEach(c=>add.push(c.value));
@@ -396,7 +476,7 @@ let msg="Pedido:%0A";
 
 document.querySelectorAll(".box").forEach((p,i)=>{
 let titulo=p.querySelector("h3").innerText;
-let tipo=p.querySelector("select")?.selectedOptions[0].text || "";
+let tipo=textoSelect(p);
 
 let add=[];
 p.querySelectorAll("input:checked").forEach(c=>add.push(c.value));
@@ -410,6 +490,8 @@ msg+=`%0ATotal: R$ ${document.getElementById("total").innerText}`;
 
 window.open("https://wa.me/5585992265249?text="+msg);
 }
+let tortasDocesAdmin = JSON.parse(localStorage.getItem("tortasDocesAdmin")) || [];
+let tortasSalgadasAdmin = JSON.parse(localStorage.getItem("tortasSalgadasAdmin")) || [];
 let combosAdmin = JSON.parse(localStorage.getItem("combosAdmin")) || [];
 
 
@@ -423,8 +505,113 @@ return;
 }
 
 document.getElementById("adminBox").style.display="flex";
+mostrarTortasAdmin();
 mostrarCombosAdmin();
 
+}
+
+
+function criarTortaDoceAdmin(){
+let nome = document.getElementById("nomeTortaDoceAdmin").value;
+
+if(nome.trim() === ""){
+alert("Digite o nome da torta doce");
+return;
+}
+
+tortasDocesAdmin.push({nome:nome, preco:10});
+localStorage.setItem("tortasDocesAdmin", JSON.stringify(tortasDocesAdmin));
+
+document.getElementById("nomeTortaDoceAdmin").value="";
+mostrarTortasAdmin();
+atualizarSelectTortas();
+}
+
+function criarTortaSalgadaAdmin(){
+let nome = document.getElementById("nomeTortaSalgadaAdmin").value;
+
+if(nome.trim() === ""){
+alert("Digite o nome da torta salgada");
+return;
+}
+
+tortasSalgadasAdmin.push({nome:nome, preco:9});
+localStorage.setItem("tortasSalgadasAdmin", JSON.stringify(tortasSalgadasAdmin));
+
+document.getElementById("nomeTortaSalgadaAdmin").value="";
+mostrarTortasAdmin();
+atualizarSelectTortas();
+}
+
+function mostrarTortasAdmin(){
+let listaDoce = document.getElementById("listaTortasDocesAdmin");
+let listaSalgada = document.getElementById("listaTortasSalgadasAdmin");
+
+listaDoce.innerHTML="";
+listaSalgada.innerHTML="";
+
+tortasDocesAdmin.forEach((torta,index)=>{
+listaDoce.innerHTML += `
+<div class="box">
+<strong>${torta.nome}</strong><br>
+R$ ${torta.preco}
+<button class="btnRemove" onclick="removerTortaDoceAdmin(${index})">Remover</button>
+</div>
+`;
+});
+
+tortasSalgadasAdmin.forEach((torta,index)=>{
+listaSalgada.innerHTML += `
+<div class="box">
+<strong>${torta.nome}</strong><br>
+R$ ${torta.preco}
+<button class="btnRemove" onclick="removerTortaSalgadaAdmin(${index})">Remover</button>
+</div>
+`;
+});
+}
+
+function removerTortaDoceAdmin(index){
+tortasDocesAdmin.splice(index,1);
+localStorage.setItem("tortasDocesAdmin", JSON.stringify(tortasDocesAdmin));
+mostrarTortasAdmin();
+atualizarSelectTortas();
+}
+
+function removerTortaSalgadaAdmin(index){
+tortasSalgadasAdmin.splice(index,1);
+localStorage.setItem("tortasSalgadasAdmin", JSON.stringify(tortasSalgadasAdmin));
+mostrarTortasAdmin();
+atualizarSelectTortas();
+}
+
+function atualizarSelectTortas(){
+
+document.querySelectorAll(".tortaDoceSelect").forEach(select=>{
+select.innerHTML = "";
+
+tortasDocesAdmin.forEach(torta=>{
+select.innerHTML += `
+<option value="${torta.preco}">
+${torta.nome} - R$${torta.preco}
+</option>
+`;
+});
+});
+
+document.querySelectorAll(".tortaSalgadaSelect").forEach(select=>{
+select.innerHTML = "";
+
+tortasSalgadasAdmin.forEach(torta=>{
+select.innerHTML += `
+<option value="${torta.preco}">
+${torta.nome} - R$${torta.preco}
+</option>
+`;
+});
+});
+
+atualizarTotal();
 }
 
 function criarComboAdmin(){
@@ -510,7 +697,7 @@ localStorage.setItem(id, "none");
 }
 
 function carregarCategorias(){
-["pasteisArea","pratinhosArea","batatasArea","combosArea"].forEach(id=>{
+["pasteisArea","pratinhosArea","batatasArea","tortasArea","combosArea"].forEach(id=>{
 let status = localStorage.getItem(id);
 if(status){
 document.getElementById(id).style.display = status;
