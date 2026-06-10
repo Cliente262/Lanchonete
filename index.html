@@ -670,13 +670,20 @@ document.querySelectorAll(".comboPreco").forEach(select=>{
 select.innerHTML = "";
 
 combosAdmin.forEach(combo=>{
+let descricao = combo.desc ? combo.desc : "Sem descrição";
+
 select.innerHTML += `
 <option 
 value="${combo.preco}" 
-data-desc="${combo.desc}">
-${combo.nome} - ${combo.desc} - R$${combo.preco}
+data-desc="${descricao}">
+${combo.nome} - ${descricao} - R$${combo.preco}
 </option>
 `;
+});
+
+});
+
+atualizarTotal();
 });
 
 });
