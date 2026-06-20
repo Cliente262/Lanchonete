@@ -4,114 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lanches da Merinha</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{background:#fff5e6;}
-header{background:linear-gradient(90deg,#ff7a00,#ff9a3c);color:white;text-align:center;padding:20px;font-size:26px;}
+body{background:#fff5e6;color:#333;}
+header{background:linear-gradient(90deg,#ff7a00,#ff9a3c);color:white;text-align:center;padding:20px;font-size:26px;font-weight:600;}
 .container{padding:20px;max-width:800px;margin:auto;}
-h1{margin-top:25px;color:#333;}
-h3{margin-top:15px;color:#333;}
-
-.box{
-background:white;
-padding:15px;
-border-radius:12px;
-margin-bottom:12px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
+h1{margin-top:25px;margin-bottom:10px;color:#333;}
+h2,h3{margin-top:15px;color:#333;}
+.box{background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.aviso{background:#fff3cd;border:1px solid #ffda6a;padding:12px;border-radius:10px;margin:12px 0;font-size:14px;}
 label{display:block;margin:5px 0;}
-select,input{padding:8px;margin-top:5px;width:100%;}
-
-button{
-background:#25D366;
-color:white;
-border:none;
-padding:15px;
-border-radius:10px;
-width:100%;
-margin-top:10px;
-font-size:16px;
-cursor:pointer;
-}
-
+select,input,textarea{padding:8px;margin-top:5px;width:100%;border:1px solid #ccc;border-radius:8px;}
+textarea{min-height:70px;resize:vertical;}
+button{background:#25D366;color:white;border:none;padding:14px;border-radius:10px;width:100%;margin-top:10px;font-size:16px;cursor:pointer;}
 .btnAdd{background:#ff7a00;}
 .btnRemove{background:#ff3c00;}
 .btnEdit{background:#007bff;}
-
-.totalBox{
-background:#fff;
-border:2px solid #ff7a00;
-padding:15px;
-border-radius:12px;
-text-align:center;
-font-size:20px;
-margin-top:20px;
-}
-.configBtn{
-position:fixed;
-right:15px;
-bottom:15px;
-width:55px;
-height:55px;
-border-radius:50%;
-background:#333;
-font-size:25px;
-z-index:10;
-padding:0;
-}
-
-.adminBox{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000000cc;
-z-index:20;
-justify-content:center;
-align-items:center;
-}
-
-.adminContent{
-background:white;
-padding:20px;
-border-radius:12px;
-width:90%;
-max-width:450px;
-max-height:90%;
-overflow:auto;
-}
-
-.adminContent input{
-width:100%;
-padding:10px;
-margin:5px 0;
-}
-
-.vazio{
-background:#fff3cd;
-padding:12px;
-border-radius:10px;
-margin:10px 0;
-color:#856404;
-}
+.btnGray{background:#555;}
+.btnPurple{background:#6f42c1;}
+.totalBox{background:#fff;border:2px solid #ff7a00;padding:15px;border-radius:12px;text-align:center;font-size:20px;margin-top:20px;}
+.configBtn{position:fixed;right:15px;bottom:15px;width:55px;height:55px;border-radius:50%;background:#333;font-size:25px;z-index:10;padding:0;}
+.adminBox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;z-index:20;justify-content:center;align-items:center;}
+.adminContent{background:white;padding:20px;border-radius:12px;width:92%;max-width:520px;max-height:90%;overflow:auto;}
+#resumoBox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;z-index:30;justify-content:center;align-items:center;}
+.resumoContent{background:white;padding:20px;border-radius:12px;width:90%;max-width:420px;max-height:80%;overflow:auto;}
 </style>
 </head>
-
 <body>
-
 <header>🍔 Lanches da Merinha</header>
 
 <div class="container">
 
 <div id="tortasArea">
 <h1>🥧 Tortas</h1>
-
 <h3>Torta Doce - R$10</h3>
 <div id="tortasDoces"></div>
 <button class="btnAdd" onclick="addTortaDocePedido()">➕ Adicionar torta doce</button>
@@ -127,20 +53,18 @@ color:#856404;
 <button class="btnAdd" onclick="addCombo()">➕ Adicionar combo</button>
 </div>
 
-<div class="totalBox">
-Total: R$ <span id="total">0</span>
-</div>
-
+<div class="totalBox">Total: R$ <span id="total">0</span></div>
 <button onclick="enviarPedido()">Enviar pedido no WhatsApp</button>
-
 </div>
 
 <button class="configBtn" onclick="abrirAdmin()">⚙️</button>
 
 <div id="adminBox" class="adminBox">
 <div class="adminContent">
-
 <h2>⚙️ Configurações</h2>
+<div class="aviso">
+As mudanças feitas aqui salvam neste aparelho. Para aparecer para outras pessoas, clique em <b>Gerar arquivo atualizado</b> e publique esse novo arquivo no GitHub.
+</div>
 
 <h3>Mostrar / Ocultar Categorias</h3>
 <button onclick="alternarCategoria('tortasArea')">🥧 Mostrar/Ocultar Tortas</button>
@@ -149,34 +73,31 @@ Total: R$ <span id="total">0</span>
 <h3>Adicionar Torta Doce</h3>
 <input id="nomeTortaDoceAdmin" placeholder="Ex: Red Velvet">
 <button class="btnAdd" onclick="criarTortaDoceAdmin()">Adicionar torta doce</button>
-
 <h3>Tortas doces cadastradas</h3>
 <div id="listaTortasDocesAdmin"></div>
 
 <h3>Adicionar Torta Salgada</h3>
 <input id="nomeTortaSalgadaAdmin" placeholder="Ex: Frango com catupiry">
 <button class="btnAdd" onclick="criarTortaSalgadaAdmin()">Adicionar torta salgada</button>
-
 <h3>Tortas salgadas cadastradas</h3>
 <div id="listaTortasSalgadasAdmin"></div>
 
 <h3>Adicionar Combo Especial</h3>
 <input id="nomeComboAdmin" placeholder="Nome do combo">
-<input id="descComboAdmin" placeholder="Descrição do combo">
-<input id="precoComboAdmin" placeholder="Preço do combo">
+<textarea id="descComboAdmin" placeholder="Descrição do combo"></textarea>
+<input id="precoComboAdmin" type="number" step="0.01" placeholder="Preço do combo">
 <button class="btnAdd" onclick="criarComboAdmin()">Adicionar combo ao cardápio</button>
-
 <h3>Combos cadastrados</h3>
 <div id="listaCombosAdmin"></div>
 
+<button class="btnPurple" onclick="gerarArquivoAtualizado()">💾 Gerar arquivo atualizado para publicar</button>
+<button class="btnGray" onclick="resetarCardapio()">🔄 Restaurar cardápio padrão</button>
 <button class="btnRemove" onclick="fecharAdmin()">Fechar</button>
-
 </div>
 </div>
 
-<!-- RESUMO -->
-<div id="resumoBox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; justify-content:center; align-items:center; z-index:30;">
-<div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; max-height:80%; overflow:auto;">
+<div id="resumoBox">
+<div class="resumoContent">
 <h2>🧾 Resumo do Pedido</h2>
 <div id="resumoConteudo"></div>
 <button onclick="confirmarPedido()">✅ Confirmar Pedido</button>
@@ -185,445 +106,357 @@ Total: R$ <span id="total">0</span>
 </div>
 
 <script>
-let countTortaDoce=0;
-let countTortaSalgada=0;
-let countCombo=0;
+// EDITE AQUI SE QUISER DEIXAR ITENS PADRÃO PARA TODO MUNDO QUE ENTRAR NO SITE.
+const CARDAPIO_PADRAO = {
+  tortasDoces: [],
+  tortasSalgadas: [],
+  combos: []
+};
 
-let tortasDocesAdmin = JSON.parse(localStorage.getItem("tortasDocesAdmin")) || [];
-let tortasSalgadasAdmin = JSON.parse(localStorage.getItem("tortasSalgadasAdmin")) || [];
-let combosAdmin = JSON.parse(localStorage.getItem("combosAdmin")) || [];
+let countTortaDoce = 0;
+let countTortaSalgada = 0;
+let countCombo = 0;
 
-// ===== SALVAR ALTERAÇÕES =====
+let tortasDocesAdmin = carregarLista('tortasDocesAdmin', CARDAPIO_PADRAO.tortasDoces);
+let tortasSalgadasAdmin = carregarLista('tortasSalgadasAdmin', CARDAPIO_PADRAO.tortasSalgadas);
+let combosAdmin = carregarLista('combosAdmin', CARDAPIO_PADRAO.combos);
+
+function carregarLista(chave, padrao){
+  let salvo = localStorage.getItem(chave);
+  if(salvo){
+    try{return JSON.parse(salvo) || [];}catch(e){return padrao || [];}
+  }
+  return padrao || [];
+}
+
 function salvarTudo(){
-localStorage.setItem("tortasDocesAdmin", JSON.stringify(tortasDocesAdmin));
-localStorage.setItem("tortasSalgadasAdmin", JSON.stringify(tortasSalgadasAdmin));
-localStorage.setItem("combosAdmin", JSON.stringify(combosAdmin));
+  localStorage.setItem('tortasDocesAdmin', JSON.stringify(tortasDocesAdmin));
+  localStorage.setItem('tortasSalgadasAdmin', JSON.stringify(tortasSalgadasAdmin));
+  localStorage.setItem('combosAdmin', JSON.stringify(combosAdmin));
 }
 
-function somenteNumero(valor){
-valor = String(valor).replace(",", ".").replace(/[^0-9.]/g, "");
-return valor === "" ? "0" : valor;
+function moeda(valor){
+  return String(valor).replace('.', ',');
 }
 
-// ===== TORTAS PEDIDO =====
+function precoNumero(valor){
+  let n = parseFloat(String(valor).replace(',', '.'));
+  return isNaN(n) ? 0 : n;
+}
+
 function addTortaDocePedido(){
-if(tortasDocesAdmin.length === 0){
-alert("Cadastre uma torta doce primeiro na engrenagem ⚙️");
-return;
-}
-
-countTortaDoce++;
-let div=document.createElement("div");
-div.className="box";
-
-div.innerHTML=`
-<h3>Torta Doce ${countTortaDoce}</h3>
-<label>Escolha a torta:</label>
-<select class="tortaPreco tortaDoceSelect"></select>
-<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>
-`;
-
-document.getElementById("tortasDoces").appendChild(div);
-atualizarSelectTortas();
-atualizarTotal();
+  if(tortasDocesAdmin.length === 0){alert('Adicione primeiro uma torta doce nas configurações ⚙️');return;}
+  countTortaDoce++;
+  let div = document.createElement('div');
+  div.className = 'box';
+  div.innerHTML = `
+  <h3>Torta Doce ${countTortaDoce}</h3>
+  <label>Escolha a torta:</label>
+  <select class="tortaPreco tortaDoceSelect"></select>
+  <button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>`;
+  document.getElementById('tortasDoces').appendChild(div);
+  atualizarSelectTortas();
+  atualizarTotal();
 }
 
 function addTortaSalgadaPedido(){
-if(tortasSalgadasAdmin.length === 0){
-alert("Cadastre uma torta salgada primeiro na engrenagem ⚙️");
-return;
+  if(tortasSalgadasAdmin.length === 0){alert('Adicione primeiro uma torta salgada nas configurações ⚙️');return;}
+  countTortaSalgada++;
+  let div = document.createElement('div');
+  div.className = 'box';
+  div.innerHTML = `
+  <h3>Torta Salgada ${countTortaSalgada}</h3>
+  <label>Escolha a torta:</label>
+  <select class="tortaPreco tortaSalgadaSelect"></select>
+  <button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>`;
+  document.getElementById('tortasSalgadas').appendChild(div);
+  atualizarSelectTortas();
+  atualizarTotal();
 }
 
-countTortaSalgada++;
-let div=document.createElement("div");
-div.className="box";
-
-div.innerHTML=`
-<h3>Torta Salgada ${countTortaSalgada}</h3>
-<label>Escolha a torta:</label>
-<select class="tortaPreco tortaSalgadaSelect"></select>
-<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>
-`;
-
-document.getElementById("tortasSalgadas").appendChild(div);
-atualizarSelectTortas();
-atualizarTotal();
-}
-
-// ===== COMBOS PEDIDO =====
 function addCombo(){
-if(combosAdmin.length === 0){
-alert("Cadastre um combo primeiro na engrenagem ⚙️");
-return;
+  if(combosAdmin.length === 0){alert('Adicione primeiro um combo nas configurações ⚙️');return;}
+  countCombo++;
+  let div = document.createElement('div');
+  div.className = 'box';
+  div.innerHTML = `
+  <h3>Combo ${countCombo}</h3>
+  <label>Escolha o combo:</label>
+  <select class="comboPreco" onchange="mostrarDescricaoCombo(this); atualizarTotal()"></select>
+  <p class="descricaoComboPedido"></p>
+  <button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>`;
+  document.getElementById('combos').appendChild(div);
+  atualizarSelectCombos();
+  mostrarDescricaoCombo(div.querySelector('.comboPreco'));
+  atualizarTotal();
 }
 
-countCombo++;
-let div=document.createElement("div");
-div.className="box";
-
-div.innerHTML=`
-<h3>Combo ${countCombo}</h3>
-<label>Escolha o combo:</label>
-<select class="comboPreco" onchange="mostrarDescricaoCombo(this); atualizarTotal();"></select>
-<p class="descricaoComboPedido"></p>
-<button class="btnRemove" onclick="this.parentElement.remove(); atualizarTotal()">❌ Remover</button>
-`;
-
-document.getElementById("combos").appendChild(div);
-atualizarSelectCombos();
-mostrarDescricaoCombo(div.querySelector(".comboPreco"));
-atualizarTotal();
-}
-
-function mostrarDescricaoCombo(select){
-let p = select.parentElement.querySelector(".descricaoComboPedido");
-if(!select.selectedOptions[0]){
-p.innerHTML = "";
-return;
-}
-let desc = select.selectedOptions[0].dataset.desc || "";
-p.innerHTML = desc ? `<strong>Descrição:</strong> ${desc}` : "";
-}
-
-// ===== TOTAL =====
 function atualizarTotal(){
-let total=0;
-
-document.querySelectorAll(".tortaPreco").forEach(s=> total+=parseFloat(s.value) || 0);
-document.querySelectorAll(".comboPreco").forEach(s=> total+=parseFloat(s.value) || 0);
-
-document.getElementById("total").innerText=total.toFixed(2).replace(".", ",");
+  let total = 0;
+  document.querySelectorAll('.tortaPreco').forEach(s => total += precoNumero(s.value));
+  document.querySelectorAll('.comboPreco').forEach(s => total += precoNumero(s.value));
+  document.getElementById('total').innerText = moeda(total.toFixed(2));
 }
 
-document.addEventListener("change", atualizarTotal);
+document.addEventListener('change', atualizarTotal);
 
 function textoSelect(box){
-let select = box.querySelector("select");
-if(!select || !select.selectedOptions[0]) return "";
-
-let opcao = select.selectedOptions[0];
-
-if(select.classList.contains("comboPreco")){
-let nome = opcao.dataset.nome || opcao.textContent.trim();
-let desc = opcao.dataset.desc || "";
-let preco = opcao.dataset.preco || opcao.value;
-return desc ? `${nome} - ${desc} - R$${preco}` : `${nome} - R$${preco}`;
+  let select = box.querySelector('select');
+  if(!select || !select.selectedOptions[0]) return '';
+  let opcao = select.selectedOptions[0];
+  if(select.classList.contains('comboPreco')){
+    let nome = opcao.dataset.nome || '';
+    let desc = opcao.dataset.desc || '';
+    let preco = opcao.dataset.preco || opcao.value;
+    return `${nome} - ${desc} - R$${moeda(preco)}`;
+  }
+  return opcao.text;
 }
 
-return opcao.textContent.trim();
-}
-
-// ===== RESUMO =====
 function enviarPedido(){
-let caixas = document.querySelectorAll(".container .box");
-if(caixas.length === 0){
-alert("Adicione pelo menos uma torta ou combo ao pedido.");
-return;
-}
+  let boxes = document.querySelectorAll('.box');
+  let html = '';
+  let total = document.getElementById('total').innerText;
 
-let html="";
-let total=document.getElementById("total").innerText;
+  document.querySelectorAll('#tortasDoces .box, #tortasSalgadas .box, #combos .box').forEach((p)=>{
+    let titulo = p.querySelector('h3').innerText;
+    let tipo = textoSelect(p);
+    html += `<b>${titulo}:</b> ${tipo}<br><br>`;
+  });
 
-caixas.forEach((p)=>{
-let titulo=p.querySelector("h3").innerText;
-let tipo=textoSelect(p);
-html+=`<b>${titulo}:</b> ${tipo}<br><br>`;
-});
+  if(html === ''){
+    alert('Adicione pelo menos uma torta ou combo ao pedido.');
+    return;
+  }
 
-html+=`<hr><b>Total: R$ ${total}</b>`;
-
-document.getElementById("resumoConteudo").innerHTML=html;
-document.getElementById("resumoBox").style.display="flex";
+  html += `<hr><b>Total: R$ ${total}</b>`;
+  document.getElementById('resumoConteudo').innerHTML = html;
+  document.getElementById('resumoBox').style.display = 'flex';
 }
 
 function fecharResumo(){
-document.getElementById("resumoBox").style.display="none";
+  document.getElementById('resumoBox').style.display = 'none';
 }
 
-// ===== WHATSAPP =====
 function confirmarPedido(){
-let msg="Pedido:%0A";
-
-document.querySelectorAll(".container .box").forEach((p)=>{
-let titulo=p.querySelector("h3").innerText;
-let tipo=textoSelect(p);
-msg+=`%0A${titulo}: ${tipo}%0A`;
-});
-
-msg+=`%0ATotal: R$ ${document.getElementById("total").innerText}`;
-window.open("https://wa.me/5585992265249?text="+msg);
+  let msg = 'Pedido:%0A';
+  document.querySelectorAll('#tortasDoces .box, #tortasSalgadas .box, #combos .box').forEach((p)=>{
+    let titulo = p.querySelector('h3').innerText;
+    let tipo = textoSelect(p);
+    msg += `%0A${titulo}: ${tipo}%0A`;
+  });
+  msg += `%0ATotal: R$ ${document.getElementById('total').innerText}`;
+  window.open('https://wa.me/5585992265249?text=' + msg, '_blank');
 }
 
-// ===== ADMIN =====
 function abrirAdmin(){
-let senha = prompt("Digite a senha:");
-
-if(senha !== "0806"){
-alert("Senha incorreta");
-return;
-}
-
-document.getElementById("adminBox").style.display="flex";
-mostrarTortasAdmin();
-mostrarCombosAdmin();
+  let senha = prompt('Digite a senha:');
+  if(senha !== '0806'){
+    alert('Senha incorreta');
+    return;
+  }
+  document.getElementById('adminBox').style.display = 'flex';
+  mostrarTortasAdmin();
+  mostrarCombosAdmin();
 }
 
 function fecharAdmin(){
-document.getElementById("adminBox").style.display="none";
+  document.getElementById('adminBox').style.display = 'none';
 }
 
 function criarTortaDoceAdmin(){
-let nome = document.getElementById("nomeTortaDoceAdmin").value.trim();
-
-if(nome === ""){
-alert("Digite o nome da torta doce");
-return;
-}
-
-tortasDocesAdmin.push({nome:nome, preco:10});
-salvarTudo();
-
-document.getElementById("nomeTortaDoceAdmin").value="";
-mostrarTortasAdmin();
-atualizarSelectTortas();
+  let nome = document.getElementById('nomeTortaDoceAdmin').value.trim();
+  if(nome === ''){alert('Digite o nome da torta doce');return;}
+  tortasDocesAdmin.push({nome:nome, preco:10});
+  document.getElementById('nomeTortaDoceAdmin').value = '';
+  salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas();
 }
 
 function criarTortaSalgadaAdmin(){
-let nome = document.getElementById("nomeTortaSalgadaAdmin").value.trim();
-
-if(nome === ""){
-alert("Digite o nome da torta salgada");
-return;
-}
-
-tortasSalgadasAdmin.push({nome:nome, preco:9});
-salvarTudo();
-
-document.getElementById("nomeTortaSalgadaAdmin").value="";
-mostrarTortasAdmin();
-atualizarSelectTortas();
+  let nome = document.getElementById('nomeTortaSalgadaAdmin').value.trim();
+  if(nome === ''){alert('Digite o nome da torta salgada');return;}
+  tortasSalgadasAdmin.push({nome:nome, preco:9});
+  document.getElementById('nomeTortaSalgadaAdmin').value = '';
+  salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas();
 }
 
 function mostrarTortasAdmin(){
-let listaDoce = document.getElementById("listaTortasDocesAdmin");
-let listaSalgada = document.getElementById("listaTortasSalgadasAdmin");
+  let listaDoce = document.getElementById('listaTortasDocesAdmin');
+  let listaSalgada = document.getElementById('listaTortasSalgadasAdmin');
+  listaDoce.innerHTML = '';
+  listaSalgada.innerHTML = '';
 
-listaDoce.innerHTML="";
-listaSalgada.innerHTML="";
+  tortasDocesAdmin.forEach((torta,index)=>{
+    listaDoce.innerHTML += `<div class="box"><strong>${torta.nome}</strong><br>R$ ${moeda(torta.preco)}
+    <button class="btnEdit" onclick="editarTortaDoceAdmin(${index})">Editar</button>
+    <button class="btnRemove" onclick="removerTortaDoceAdmin(${index})">Remover</button></div>`;
+  });
 
-if(tortasDocesAdmin.length === 0){
-listaDoce.innerHTML = `<div class="vazio">Nenhuma torta doce cadastrada.</div>`;
-}
-
-if(tortasSalgadasAdmin.length === 0){
-listaSalgada.innerHTML = `<div class="vazio">Nenhuma torta salgada cadastrada.</div>`;
-}
-
-tortasDocesAdmin.forEach((torta,index)=>{
-listaDoce.innerHTML += `
-<div class="box">
-<strong>${torta.nome}</strong><br>
-R$ ${torta.preco}
-<button class="btnEdit" onclick="editarTortaDoceAdmin(${index})">Editar</button>
-<button class="btnRemove" onclick="removerTortaDoceAdmin(${index})">Remover</button>
-</div>
-`;
-});
-
-tortasSalgadasAdmin.forEach((torta,index)=>{
-listaSalgada.innerHTML += `
-<div class="box">
-<strong>${torta.nome}</strong><br>
-R$ ${torta.preco}
-<button class="btnEdit" onclick="editarTortaSalgadaAdmin(${index})">Editar</button>
-<button class="btnRemove" onclick="removerTortaSalgadaAdmin(${index})">Remover</button>
-</div>
-`;
-});
+  tortasSalgadasAdmin.forEach((torta,index)=>{
+    listaSalgada.innerHTML += `<div class="box"><strong>${torta.nome}</strong><br>R$ ${moeda(torta.preco)}
+    <button class="btnEdit" onclick="editarTortaSalgadaAdmin(${index})">Editar</button>
+    <button class="btnRemove" onclick="removerTortaSalgadaAdmin(${index})">Remover</button></div>`;
+  });
 }
 
 function editarTortaDoceAdmin(index){
-let novoNome = prompt("Novo nome da torta doce:", tortasDocesAdmin[index].nome);
-if(novoNome === null || novoNome.trim() === "") return;
-tortasDocesAdmin[index].nome = novoNome.trim();
-salvarTudo();
-mostrarTortasAdmin();
-atualizarSelectTortas();
+  let novoNome = prompt('Novo nome da torta doce:', tortasDocesAdmin[index].nome);
+  if(novoNome && novoNome.trim() !== ''){
+    tortasDocesAdmin[index].nome = novoNome.trim();
+    salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas();
+  }
 }
 
 function editarTortaSalgadaAdmin(index){
-let novoNome = prompt("Novo nome da torta salgada:", tortasSalgadasAdmin[index].nome);
-if(novoNome === null || novoNome.trim() === "") return;
-tortasSalgadasAdmin[index].nome = novoNome.trim();
-salvarTudo();
-mostrarTortasAdmin();
-atualizarSelectTortas();
+  let novoNome = prompt('Novo nome da torta salgada:', tortasSalgadasAdmin[index].nome);
+  if(novoNome && novoNome.trim() !== ''){
+    tortasSalgadasAdmin[index].nome = novoNome.trim();
+    salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas();
+  }
 }
 
 function removerTortaDoceAdmin(index){
-if(!confirm("Remover esta torta doce?")) return;
-tortasDocesAdmin.splice(index,1);
-salvarTudo();
-mostrarTortasAdmin();
-atualizarSelectTortas();
-atualizarTotal();
+  tortasDocesAdmin.splice(index,1);
+  salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas(); atualizarTotal();
 }
 
 function removerTortaSalgadaAdmin(index){
-if(!confirm("Remover esta torta salgada?")) return;
-tortasSalgadasAdmin.splice(index,1);
-salvarTudo();
-mostrarTortasAdmin();
-atualizarSelectTortas();
-atualizarTotal();
+  tortasSalgadasAdmin.splice(index,1);
+  salvarTudo(); mostrarTortasAdmin(); atualizarSelectTortas(); atualizarTotal();
 }
 
 function atualizarSelectTortas(){
-document.querySelectorAll(".tortaDoceSelect").forEach(select=>{
-let valorAtual = select.value;
-select.innerHTML = "";
+  document.querySelectorAll('.tortaDoceSelect').forEach(select=>{
+    let valorAtual = select.value;
+    select.innerHTML = '';
+    tortasDocesAdmin.forEach(torta=>{
+      select.innerHTML += `<option value="${torta.preco}">${torta.nome} - R$${moeda(torta.preco)}</option>`;
+    });
+    if(valorAtual) select.value = valorAtual;
+  });
 
-tortasDocesAdmin.forEach(torta=>{
-select.innerHTML += `<option value="${torta.preco}">${torta.nome} - R$${torta.preco}</option>`;
-});
-
-if(valorAtual) select.value = valorAtual;
-});
-
-document.querySelectorAll(".tortaSalgadaSelect").forEach(select=>{
-let valorAtual = select.value;
-select.innerHTML = "";
-
-tortasSalgadasAdmin.forEach(torta=>{
-select.innerHTML += `<option value="${torta.preco}">${torta.nome} - R$${torta.preco}</option>`;
-});
-
-if(valorAtual) select.value = valorAtual;
-});
-
-atualizarTotal();
+  document.querySelectorAll('.tortaSalgadaSelect').forEach(select=>{
+    let valorAtual = select.value;
+    select.innerHTML = '';
+    tortasSalgadasAdmin.forEach(torta=>{
+      select.innerHTML += `<option value="${torta.preco}">${torta.nome} - R$${moeda(torta.preco)}</option>`;
+    });
+    if(valorAtual) select.value = valorAtual;
+  });
+  atualizarTotal();
 }
 
 function criarComboAdmin(){
-let nome = document.getElementById("nomeComboAdmin").value.trim();
-let desc = document.getElementById("descComboAdmin").value.trim();
-let preco = somenteNumero(document.getElementById("precoComboAdmin").value);
-
-if(nome === "" || preco === "0"){
-alert("Preencha pelo menos o nome e o preço do combo");
-return;
-}
-
-combosAdmin.push({nome:nome, desc:desc, preco:preco});
-salvarTudo();
-
-document.getElementById("nomeComboAdmin").value="";
-document.getElementById("descComboAdmin").value="";
-document.getElementById("precoComboAdmin").value="";
-
-mostrarCombosAdmin();
-atualizarSelectCombos();
+  let nome = document.getElementById('nomeComboAdmin').value.trim();
+  let desc = document.getElementById('descComboAdmin').value.trim();
+  let preco = document.getElementById('precoComboAdmin').value.trim();
+  if(nome === '' || preco === ''){alert('Preencha pelo menos o nome e o preço do combo');return;}
+  combosAdmin.push({nome:nome, desc:desc, preco:precoNumero(preco).toFixed(2)});
+  document.getElementById('nomeComboAdmin').value = '';
+  document.getElementById('descComboAdmin').value = '';
+  document.getElementById('precoComboAdmin').value = '';
+  salvarTudo(); mostrarCombosAdmin(); atualizarSelectCombos();
 }
 
 function mostrarCombosAdmin(){
-let lista = document.getElementById("listaCombosAdmin");
-lista.innerHTML="";
-
-if(combosAdmin.length === 0){
-lista.innerHTML = `<div class="vazio">Nenhum combo cadastrado.</div>`;
-}
-
-combosAdmin.forEach((combo,index)=>{
-lista.innerHTML += `
-<div class="box">
-<strong>${combo.nome}</strong><br>
-${combo.desc}<br>
-R$ ${combo.preco}
-<button class="btnEdit" onclick="editarComboAdmin(${index})">Editar</button>
-<button class="btnRemove" onclick="removerComboAdmin(${index})">Remover</button>
-</div>
-`;
-});
+  let lista = document.getElementById('listaCombosAdmin');
+  lista.innerHTML = '';
+  combosAdmin.forEach((combo,index)=>{
+    lista.innerHTML += `<div class="box"><strong>${combo.nome}</strong><br>${combo.desc}<br>R$ ${moeda(combo.preco)}
+    <button class="btnEdit" onclick="editarComboAdmin(${index})">Editar</button>
+    <button class="btnRemove" onclick="removerComboAdmin(${index})">Remover</button></div>`;
+  });
 }
 
 function editarComboAdmin(index){
-let novoNome = prompt("Nome do combo:", combosAdmin[index].nome);
-if(novoNome === null || novoNome.trim() === "") return;
-
-let novaDesc = prompt("Descrição do combo:", combosAdmin[index].desc || "");
-if(novaDesc === null) return;
-
-let novoPreco = prompt("Preço do combo:", combosAdmin[index].preco);
-if(novoPreco === null || somenteNumero(novoPreco) === "0") return;
-
-combosAdmin[index] = {
-nome: novoNome.trim(),
-desc: novaDesc.trim(),
-preco: somenteNumero(novoPreco)
-};
-
-salvarTudo();
-mostrarCombosAdmin();
-atualizarSelectCombos();
+  let combo = combosAdmin[index];
+  let nome = prompt('Nome do combo:', combo.nome);
+  if(!nome || nome.trim() === '') return;
+  let desc = prompt('Descrição do combo:', combo.desc || '');
+  let preco = prompt('Preço do combo:', combo.preco);
+  if(!preco || preco.trim() === '') return;
+  combosAdmin[index] = {nome:nome.trim(), desc:(desc || '').trim(), preco:precoNumero(preco).toFixed(2)};
+  salvarTudo(); mostrarCombosAdmin(); atualizarSelectCombos(); atualizarTotal();
 }
 
 function removerComboAdmin(index){
-if(!confirm("Remover este combo?")) return;
-combosAdmin.splice(index,1);
-salvarTudo();
-mostrarCombosAdmin();
-atualizarSelectCombos();
-atualizarTotal();
+  combosAdmin.splice(index,1);
+  salvarTudo(); mostrarCombosAdmin(); atualizarSelectCombos(); atualizarTotal();
 }
 
 function atualizarSelectCombos(){
-document.querySelectorAll(".comboPreco").forEach(select=>{
-let valorAtual = select.value;
-select.innerHTML = "";
-
-combosAdmin.forEach(combo=>{
-select.innerHTML += `
-<option value="${combo.preco}" data-nome="${combo.nome}" data-desc="${combo.desc}" data-preco="${combo.preco}">
-${combo.nome} - ${combo.desc} - R$${combo.preco}
-</option>
-`;
-});
-
-if(valorAtual) select.value = valorAtual;
-mostrarDescricaoCombo(select);
-});
-
-atualizarTotal();
+  document.querySelectorAll('.comboPreco').forEach(select=>{
+    let valorAtual = select.value;
+    select.innerHTML = '';
+    combosAdmin.forEach(combo=>{
+      select.innerHTML += `<option value="${combo.preco}" data-nome="${combo.nome}" data-desc="${combo.desc}" data-preco="${combo.preco}">${combo.nome} - ${combo.desc} - R$${moeda(combo.preco)}</option>`;
+    });
+    if(valorAtual) select.value = valorAtual;
+    mostrarDescricaoCombo(select);
+  });
+  atualizarTotal();
 }
 
-// ===== MOSTRAR / OCULTAR CATEGORIAS COM SALVAMENTO =====
+function mostrarDescricaoCombo(select){
+  if(!select) return;
+  let p = select.parentElement.querySelector('.descricaoComboPedido');
+  if(!p) return;
+  let opcao = select.selectedOptions[0];
+  p.innerHTML = opcao ? `<strong>Descrição:</strong> ${opcao.dataset.desc || ''}` : '';
+}
+
 function alternarCategoria(id){
-let area = document.getElementById(id);
-
-if(area.style.display === "none"){
-area.style.display = "block";
-localStorage.setItem(id, "block");
-}else{
-area.style.display = "none";
-localStorage.setItem(id, "none");
-}
+  let area = document.getElementById(id);
+  if(area.style.display === 'none'){
+    area.style.display = 'block';
+    localStorage.setItem(id, 'block');
+  }else{
+    area.style.display = 'none';
+    localStorage.setItem(id, 'none');
+  }
 }
 
 function carregarCategorias(){
-["tortasArea","combosArea"].forEach(id=>{
-let status = localStorage.getItem(id);
-if(status){
-document.getElementById(id).style.display = status;
-}
-});
+  ['tortasArea','combosArea'].forEach(id=>{
+    let status = localStorage.getItem(id);
+    if(status && document.getElementById(id)) document.getElementById(id).style.display = status;
+  });
 }
 
-// ===== INICIAR SITE =====
+function resetarCardapio(){
+  if(!confirm('Tem certeza que deseja apagar as mudanças deste aparelho e voltar ao padrão?')) return;
+  localStorage.removeItem('tortasDocesAdmin');
+  localStorage.removeItem('tortasSalgadasAdmin');
+  localStorage.removeItem('combosAdmin');
+  localStorage.removeItem('tortasArea');
+  localStorage.removeItem('combosArea');
+  location.reload();
+}
+
+function gerarArquivoAtualizado(){
+  salvarTudo();
+  const novoPadrao = {
+    tortasDoces: tortasDocesAdmin,
+    tortasSalgadas: tortasSalgadasAdmin,
+    combos: combosAdmin
+  };
+  let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  html = html.replace(/const CARDAPIO_PADRAO = \{[\s\S]*?\};/, 'const CARDAPIO_PADRAO = ' + JSON.stringify(novoPadrao, null, 2) + ';');
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('Arquivo index.html gerado. Publique esse arquivo no GitHub para as mudanças aparecerem para outras pessoas.');
+}
+
 carregarCategorias();
 atualizarSelectTortas();
 atualizarSelectCombos();
 atualizarTotal();
 </script>
-
 </body>
 </html>
+
