@@ -106,11 +106,22 @@ As mudanças feitas aqui salvam neste aparelho. Para aparecer para outras pessoa
 </div>
 
 <script>
-// EDITE AQUI SE QUISER DEIXAR ITENS PADRÃO PARA TODO MUNDO QUE ENTRAR NO SITE.
+// ITENS PADRÃO: ficam visíveis para TODO MUNDO quando este arquivo for publicado no GitHub.
 const CARDAPIO_PADRAO = {
-  tortasDoces: [],
-  tortasSalgadas: [],
-  combos: []
+  tortasDoces: [
+    {nome: 'Red Velvet', preco: 10},
+    {nome: 'Chocolate', preco: 10},
+    {nome: 'Morango', preco: 10}
+  ],
+  tortasSalgadas: [
+    {nome: 'Frango com catupiry', preco: 9},
+    {nome: 'Carne', preco: 9},
+    {nome: 'Queijo', preco: 9}
+  ],
+  combos: [
+    {nome: 'Combo Rápido', desc: '1 pastel + 1 batata + 1 refrigerante', preco: '20.00'},
+    {nome: 'Combo Especial', desc: '2 pastéis + 1 batata', preco: '25.00'}
+  ]
 };
 
 let countTortaDoce = 0;
@@ -124,7 +135,10 @@ let combosAdmin = carregarLista('combosAdmin', CARDAPIO_PADRAO.combos);
 function carregarLista(chave, padrao){
   let salvo = localStorage.getItem(chave);
   if(salvo){
-    try{return JSON.parse(salvo) || [];}catch(e){return padrao || [];}
+    try{
+      let lista = JSON.parse(salvo);
+      if(Array.isArray(lista) && lista.length > 0) return lista;
+    }catch(e){}
   }
   return padrao || [];
 }
